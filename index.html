@@ -1,0 +1,1050 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>BOI CRM – IndusFood Lead Capture</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- Bootstrap CSS (CDN) -->
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+  />
+
+  <style>
+    body {
+      background: #0b1120;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        sans-serif;
+      color: #e5e7eb;
+    }
+
+    .app-shell {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .app-header {
+      background: radial-gradient(circle at top left, #4f46e5, #0b1120);
+      color: #fff;
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid rgba(148, 163, 184, 0.4);
+    }
+
+    .app-header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .brand-block {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .brand-logo {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      background: #f9fafb;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .brand-logo img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+    }
+
+    .brand-text h1 {
+      font-size: 1.05rem;
+      font-weight: 600;
+      margin: 0;
+      letter-spacing: 0.03em;
+    }
+
+    .brand-text small {
+      font-size: 0.7rem;
+      opacity: 0.9;
+    }
+
+    .header-badges {
+      text-align: right;
+      font-size: 0.7rem;
+    }
+
+    .header-badges .badge {
+      background: rgba(15, 23, 42, 0.6);
+      border-radius: 999px;
+      padding: 0.25rem 0.7rem;
+    }
+
+    main {
+      padding: 0.75rem;
+    }
+
+    .card {
+      border-radius: 0.9rem;
+      border: 1px solid rgba(148, 163, 184, 0.25);
+      background: radial-gradient(circle at top left, #020617, #020617);
+      color: #e5e7eb;
+    }
+
+    .card-header {
+      border-bottom: 1px solid rgba(148, 163, 184, 0.25);
+      background: linear-gradient(to right, rgba(15, 23, 42, 0.9), #020617);
+      padding: 0.4rem 0.9rem;
+    }
+
+    .card-header h5 {
+      font-size: 0.9rem;
+      margin: 0;
+      font-weight: 500;
+    }
+
+    .card-body {
+      padding: 0.8rem 0.9rem 0.9rem;
+    }
+
+    .btn-toggle-group .btn {
+      min-width: 7rem;
+    }
+
+    .form-label {
+      font-size: 0.8rem;
+      margin-bottom: 0.1rem;
+      color: #cbd5f5;
+    }
+
+    .form-control,
+    .form-select {
+      font-size: 0.9rem;
+      padding: 0.35rem 0.6rem;
+      background: #020617;
+      border-color: rgba(148, 163, 184, 0.6);
+      color: #e5e7eb;
+    }
+
+    .form-control:focus,
+    .form-select:focus {
+      border-color: #4f46e5;
+      box-shadow: 0 0 0 1px rgba(79, 70, 229, 0.6);
+      background: #020617;
+      color: #e5e7eb;
+    }
+
+    .lead-table-wrapper {
+      max-height: 40vh;
+      overflow-y: auto;
+    }
+
+    .table {
+      color: #e5e7eb;
+      font-size: 0.8rem;
+    }
+
+    .table thead {
+      background: #020617;
+      border-bottom: 1px solid rgba(148, 163, 184, 0.4);
+    }
+
+    .table-striped > tbody > tr:nth-of-type(odd) {
+      --bs-table-accent-bg: rgba(15, 23, 42, 0.9);
+    }
+
+    .lead-badge-supplier {
+      background: linear-gradient(to right, #0f766e, #22c55e);
+    }
+
+    .lead-badge-buyer {
+      background: linear-gradient(to right, #2563eb, #38bdf8);
+    }
+
+    .saving-indicator {
+      font-size: 0.75rem;
+    }
+
+    .btn-qr-main {
+      border-radius: 999px;
+      font-size: 0.8rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.25rem 0.8rem;
+    }
+
+    .btn-qr-main svg {
+      width: 14px;
+      height: 14px;
+    }
+
+    /* QR Scanner overlay */
+    #qrScannerOverlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.9);
+      display: none;
+      z-index: 9999;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+
+    #qrScannerBox {
+      background: #020617;
+      border-radius: 1rem;
+      padding: 1rem;
+      max-width: 480px;
+      width: 100%;
+      color: #e5e7eb;
+      border: 1px solid rgba(148, 163, 184, 0.6);
+      box-shadow: 0 20px 50px rgba(15, 23, 42, 0.9);
+    }
+
+    #qr-reader {
+      width: 100%;
+      min-height: 260px;
+      background: #020617;
+    }
+
+    .small-muted {
+      font-size: 0.75rem;
+      color: #9ca3af;
+    }
+
+    .pill-label {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: #9ca3af;
+    }
+
+    @media (max-width: 576px) {
+      .app-header-inner {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .header-badges {
+        text-align: left;
+      }
+    }
+
+    /* Disabled-looking scan button */
+    .btn-disabled {
+      opacity: 0.5;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    <header class="app-header">
+      <div class="app-header-inner">
+        <div class="brand-block">
+          <div class="brand-logo">
+            <!-- Put your logo in same folder and update filename if needed -->
+            <img src="boi-logo.png" alt="BOI Logo" />
+          </div>
+          <div class="brand-text">
+            <h1>BOI CRM – IndusFood</h1>
+            <small>Blue Orbit International LLP · Secure Lead Capture</small>
+          </div>
+        </div>
+        <div class="header-badges d-none d-sm-block">
+          <div><span class="badge">Tablet &amp; Phone Ready</span></div>
+          <div class="mt-1 small-muted">All entries are pushed to Google Sheets</div>
+        </div>
+      </div>
+    </header>
+
+    <main class="py-2 px-2 px-sm-3">
+      <!-- Top bar: mode + QR + status -->
+      <div class="card mb-3">
+        <div class="card-body d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-2">
+          <div class="d-flex flex-wrap align-items-center gap-2">
+            <div class="pill-label">Lead type</div>
+            <div class="btn-toggle-group btn-group btn-group-sm" role="group" aria-label="Lead type">
+              <button type="button" class="btn btn-outline-primary" id="btnSupplier">Supplier</button>
+              <button type="button" class="btn btn-outline-primary" id="btnBuyer">Buyer</button>
+            </div>
+          </div>
+
+          <div class="d-flex flex-wrap align-items-center gap-2">
+            <button
+              type="button"
+              class="btn btn-outline-light btn-qr-main btn-disabled"
+              id="btnScanQr"
+            >
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <rect x="3" y="3" width="7" height="7" rx="1.5" stroke-width="1.6"></rect>
+                <rect x="14" y="3" width="7" height="7" rx="1.5" stroke-width="1.6"></rect>
+                <rect x="3" y="14" width="7" height="7" rx="1.5" stroke-width="1.6"></rect>
+                <path d="M14 14h3v3h-3zM18 18h3v3h-3zM18 14h3v3h-3zM14 18h3v3h-3z" stroke-width="1.6"></path>
+              </svg>
+              Scan badge / QR
+            </button>
+
+            <div class="text-end">
+              <div id="summaryCounts" class="small-muted">0 leads this session</div>
+              <div id="savingStatus" class="saving-indicator text-info"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Layout: Form (left) + BOI Contact QR + session table (right) -->
+      <div class="row g-3">
+        <div class="col-12 col-lg-8">
+          <!-- Supplier Form -->
+          <div class="card mb-3 d-none" id="supplierFormCard">
+            <div class="card-header">
+              <h5>Supplier details</h5>
+            </div>
+            <div class="card-body">
+              <p class="small-muted mb-2">
+                Please hand this device to the supplier to fill in their details, or enter on their behalf.
+              </p>
+
+              <div class="row g-2">
+                <div class="col-12 col-md-6">
+                  <label class="form-label">Company name *</label>
+                  <input type="text" class="form-control" id="supCompany" />
+                </div>
+
+                <div class="col-12 col-md-6">
+                  <label class="form-label">Contact person</label>
+                  <input type="text" class="form-control" id="supContact" />
+                </div>
+
+                <div class="col-12 col-md-6">
+                  <label class="form-label">Email</label>
+                  <input type="email" class="form-control" id="supEmail" />
+                </div>
+
+                <div class="col-12 col-md-6">
+                  <label class="form-label">Phone / WhatsApp</label>
+                  <input type="text" class="form-control" id="supPhone" />
+                </div>
+
+                <div class="col-12 col-md-6">
+                  <label class="form-label">Country</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="supCountry"
+                    placeholder="India, UAE, EU, GCC..."
+                  />
+                </div>
+
+                <div class="col-12 col-md-6">
+                  <label class="form-label">Product type</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="supProductType"
+                    placeholder="Chips, powders, sweeteners..."
+                  />
+                </div>
+
+                <div class="col-12">
+                  <label class="form-label">What do they sell? (list – one item per line) *</label>
+                  <textarea
+                    class="form-control"
+                    id="supProducts"
+                    rows="3"
+                    placeholder="Example:
+• Vacuum-cooked banana chips 100 g
+• Dehydrated mango powder
+• Organic jaggery blocks"
+                  ></textarea>
+                </div>
+
+                <div class="col-12">
+                  <label class="form-label">Attachment link (catalog / card image / other – Drive or URL)</label>
+                  <input
+                    type="url"
+                    class="form-control"
+                    id="supAttachment"
+                    placeholder="Paste link to catalog, business card photo, or Drive file"
+                  />
+                </div>
+
+                <div class="col-12 col-md-6">
+                  <label class="form-label">Price – Ex-Factory (notes)</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="supExFactory"
+                    placeholder="e.g., $X per kg / carton"
+                  />
+                </div>
+
+                <div class="col-12 col-md-6">
+                  <label class="form-label">Price – FOB (port & notes)</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="supFOB"
+                    placeholder="e.g., FOB Nhava Sheva – $Y per kg"
+                  />
+                </div>
+
+                <div class="col-12">
+                  <label class="form-label">QR / card data (auto-filled from scan)</label>
+                  <textarea
+                    class="form-control"
+                    id="supQR"
+                    rows="2"
+                    placeholder="Badge / business card text or vCard info from QR"
+                  ></textarea>
+                </div>
+
+                <div class="col-12">
+                  <label class="form-label">Notes</label>
+                  <textarea
+                    class="form-control"
+                    id="supNotes"
+                    rows="2"
+                    placeholder="MOQ, certifications, sample requests, follow-up notes..."
+                  ></textarea>
+                </div>
+              </div>
+
+              <div class="d-flex gap-2 mt-3">
+                <button class="btn btn-success btn-sm" id="btnSaveSupplier">
+                  Save to Sheet &amp; new
+                </button>
+                <button class="btn btn-outline-secondary btn-sm" id="btnClearSupplier">
+                  Clear form
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Buyer Form -->
+          <div class="card mb-3 d-none" id="buyerFormCard">
+            <div class="card-header">
+              <h5>Buyer details</h5>
+            </div>
+            <div class="card-body">
+              <p class="small-muted mb-2">
+                Use this for retailers, distributors, importers, or private-label buyers.
+              </p>
+
+              <div class="row g-2">
+                <div class="col-12 col-md-6">
+                  <label class="form-label">Contact name *</label>
+                  <input type="text" class="form-control" id="buyContact" />
+                </div>
+
+                <div class="col-12 col-md-6">
+                  <label class="form-label">Company</label>
+                  <input type="text" class="form-control" id="buyCompany" />
+                </div>
+
+                <div class="col-12 col-md-6">
+                  <label class="form-label">Email</label>
+                  <input type="email" class="form-control" id="buyEmail" />
+                </div>
+
+                <div class="col-12 col-md-6">
+                  <label class="form-label">Phone / WhatsApp</label>
+                  <input type="text" class="form-control" id="buyPhone" />
+                </div>
+
+                <div class="col-12 col-md-6">
+                  <label class="form-label">Country</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="buyCountry"
+                    placeholder="India, USA, EU, GCC..."
+                  />
+                </div>
+
+                <div class="col-12">
+                  <label class="form-label">What do they want to buy? (list – one item per line) *</label>
+                  <textarea
+                    class="form-control"
+                    id="buyNeeds"
+                    rows="2"
+                    placeholder="Example:
+• Roohted vacuum-cooked chips 50 g
+• F5 prebiotic soda – Bright Tropic
+• Dehydrated tomato powder 25 kg"
+                  ></textarea>
+                </div>
+
+                <div class="col-12">
+                  <label class="form-label">Attachment link (business card / RFQ / other – Drive or URL)</label>
+                  <input
+                    type="url"
+                    class="form-control"
+                    id="buyAttachment"
+                    placeholder="Paste link to card photo, RFQ, or Drive file"
+                  />
+                </div>
+
+                <div class="col-12 col-md-6">
+                  <label class="form-label">Private label / own brand?</label>
+                  <select class="form-select" id="buyPL">
+                    <option value="">Select...</option>
+                    <option value="Private label">Private label</option>
+                    <option value="Own brand">Own brand</option>
+                    <option value="Both / open">Both / open to discussion</option>
+                  </select>
+                </div>
+
+                <div class="col-12 col-md-6">
+                  <label class="form-label">Target markets</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="buyMarkets"
+                    placeholder="India, GCC, EU, US..."
+                  />
+                </div>
+
+                <div class="col-12">
+                  <label class="form-label">QR / card data (auto-filled from scan)</label>
+                  <textarea
+                    class="form-control"
+                    id="buyQR"
+                    rows="2"
+                    placeholder="Badge / business card text or vCard info from QR"
+                  ></textarea>
+                </div>
+
+                <div class="col-12">
+                  <label class="form-label">Notes</label>
+                  <textarea
+                    class="form-control"
+                    id="buyNotes"
+                    rows="2"
+                    placeholder="Volume, timelines, certifications, follow-up plan..."
+                  ></textarea>
+                </div>
+              </div>
+
+              <div class="d-flex gap-2 mt-3">
+                <button class="btn btn-success btn-sm" id="btnSaveBuyer">
+                  Save to Sheet &amp; new
+                </button>
+                <button class="btn btn-outline-secondary btn-sm" id="btnClearBuyer">
+                  Clear form
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right column: BOI contact QR + session leads -->
+        <div class="col-12 col-lg-4">
+          <div class="card mb-3">
+            <div class="card-header d-flex justify-content-between align-items-center">
+              <h5 class="mb-0">Share BOI contact</h5>
+            </div>
+            <div class="card-body text-center">
+              <p class="small-muted mb-2">
+                Ask the visitor to scan this QR with their phone to save your BOI contact details.
+              </p>
+              <div id="boiContactQr" class="d-inline-block p-2 bg-white rounded"></div>
+              <p class="small-muted mt-2 mb-1">
+                Contains name, company, email, phone, and website as a vCard.
+              </p>
+              <p class="small-muted mb-0">
+                You can customize these details in the code (constant <code>BOI_VCARD</code>).
+              </p>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <h5 class="mb-0">Today’s leads (this device)</h5>
+            </div>
+            <div class="card-body">
+              <p class="small-muted">
+                Internal view only. This shows leads captured in this browser during this session.
+                Full history is in your Google Sheet.
+              </p>
+
+              <div class="d-flex justify-content-between align-items-center mb-2">
+                <select class="form-select form-select-sm" id="filterType" style="max-width: 9rem;">
+                  <option value="all">All types</option>
+                  <option value="supplier">Suppliers</option>
+                  <option value="buyer">Buyers</option>
+                </select>
+              </div>
+
+              <div class="lead-table-wrapper">
+                <table class="table table-sm table-striped align-middle" id="leadsTable">
+                  <thead>
+                    <tr>
+                      <th>Type</th>
+                      <th>Contact / Company</th>
+                      <th>Country</th>
+                      <th>Products / Needs</th>
+                      <th>Phone</th>
+                      <th>Email</th>
+                      <th>Time</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <!-- rows injected by JS -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- QR Scanner Overlay -->
+  <div id="qrScannerOverlay" class="d-flex">
+    <div id="qrScannerBox">
+      <div class="d-flex justify-content-between align-items-center mb-2">
+        <h6 class="mb-0">Scan badge / business card</h6>
+        <button
+          type="button"
+          class="btn btn-sm btn-outline-light"
+          onclick="closeQrScanner()"
+        >
+          Close
+        </button>
+      </div>
+      <p class="small-muted mb-2">
+        Point the tablet camera at the visitor’s badge or business card QR. We’ll auto-fill the current form with any contact details we can read.
+      </p>
+      <div id="qr-reader"></div>
+    </div>
+  </div>
+
+  <!-- JS libs -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+  <script>
+    // 🔧 PASTE YOUR APPS SCRIPT WEB APP URL HERE
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzrHBqp6ZcS3lvRir9EchBhsldBS1jRghuQCWhj7XOY4nyuy8NRQP6mz3J1WGNYm-cD/exec';
+
+    // vCard for your BOI contact QR
+    const BOI_VCARD = [
+      'BEGIN:VCARD',
+      'VERSION:3.0',
+      'N:Kapoor;Ritesh;;;',
+      'FN:Ritesh Kapoor',
+      'ORG:Blue Orbit International LLP',
+      'TITLE:Founder & CEO',
+      'TEL;TYPE=CELL,VOICE:+1-706-993-6121',
+      'EMAIL;TYPE=INTERNET:ritesh.kapoor@boifnb.com',
+      'URL:https://boifnb.com',
+      'END:VCARD'
+    ].join('\\n');
+
+    let entries = [];       // session-only leads for right-hand table
+    let html5QrCode = null; // QR scanner instance
+    let currentMode = null; // 'supplier' or 'buyer'
+    let scannerActive = false;
+
+    function updateSummary() {
+      const suppliers = entries.filter((e) => e.type === 'supplier').length;
+      const buyers = entries.filter((e) => e.type === 'buyer').length;
+      document.getElementById('summaryCounts').textContent =
+        `${entries.length} leads this session (${suppliers} suppliers • ${buyers} buyers)`;
+    }
+
+    function formatDateTime(ts) {
+      const d = new Date(ts);
+      return d.toLocaleDateString() + ' ' +
+        d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    }
+
+    function productsDisplayText(raw) {
+      if (!raw) return '';
+      const lines = raw.split(/\\r?\\n/).map((l) => l.trim()).filter(Boolean);
+      if (!lines.length) return '';
+      return '• ' + lines.join(' • ');
+    }
+
+    function renderTable() {
+      const tbody = document.querySelector('#leadsTable tbody');
+      tbody.innerHTML = '';
+
+      const filter = document.getElementById('filterType').value;
+      const filtered = entries.filter((e) =>
+        filter === 'all' ? true : e.type === filter
+      );
+
+      filtered.slice().reverse().forEach((entry) => {
+        const tr = document.createElement('tr');
+
+        const tdType = document.createElement('td');
+        const badge = document.createElement('span');
+        badge.classList.add('badge', 'text-capitalize');
+        badge.classList.add(
+          entry.type === 'supplier' ? 'lead-badge-supplier' : 'lead-badge-buyer'
+        );
+        badge.textContent = entry.type;
+        tdType.appendChild(badge);
+
+        const tdName = document.createElement('td');
+        tdName.innerHTML =
+          (entry.contact || '(no contact)') +
+          "<br/><small class='text-muted'>" +
+          (entry.company || '') +
+          '</small>';
+
+        const tdCountry = document.createElement('td');
+        tdCountry.textContent = entry.country || '';
+
+        const tdProducts = document.createElement('td');
+        tdProducts.textContent = productsDisplayText(entry.productsOrNeeds);
+
+        const tdPhone = document.createElement('td');
+        tdPhone.textContent = entry.phone || '';
+
+        const tdEmail = document.createElement('td');
+        tdEmail.textContent = entry.email || '';
+
+        const tdTime = document.createElement('td');
+        tdTime.textContent = formatDateTime(entry.timestamp);
+
+        tr.appendChild(tdType);
+        tr.appendChild(tdName);
+        tr.appendChild(tdCountry);
+        tr.appendChild(tdProducts);
+        tr.appendChild(tdPhone);
+        tr.appendChild(tdEmail);
+        tr.appendChild(tdTime);
+
+        tbody.appendChild(tr);
+      });
+    }
+
+    function setSavingStatus(msg, colorClass) {
+      const el = document.getElementById('savingStatus');
+      el.className = 'saving-indicator';
+      if (colorClass) el.classList.add(colorClass);
+      el.textContent = msg || '';
+    }
+
+    async function submitToSheet(entry) {
+      if (!SCRIPT_URL || SCRIPT_URL.includes('PASTE_YOUR_WEB_APP_URL_HERE')) {
+        alert('SCRIPT_URL not configured. Please edit the HTML file and paste your Apps Script Web App URL.');
+        return false;
+      }
+
+      setSavingStatus('Saving...', 'text-info');
+      try {
+        await fetch(SCRIPT_URL, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(entry)
+        });
+        setSavingStatus('Saved to Sheet.', 'text-success');
+        setTimeout(() => setSavingStatus('', ''), 2000);
+        return true;
+      } catch (err) {
+        console.error('Error sending to Sheets:', err);
+        setSavingStatus('Save failed. Check network.', 'text-danger');
+        alert('Could not save to Google Sheet. Please check internet and try again.');
+        return false;
+      }
+    }
+
+    // ----- Supplier helpers -----
+    function clearSupplierForm() {
+      [
+        'supCompany','supContact','supEmail','supPhone','supCountry',
+        'supProductType','supProducts','supAttachment',
+        'supExFactory','supFOB','supQR','supNotes'
+      ].forEach((id) => {
+        const el = document.getElementById(id);
+        if (el) el.value = '';
+      });
+    }
+
+    async function saveSupplier() {
+      const company  = document.getElementById('supCompany').value.trim();
+      const products = document.getElementById('supProducts').value.trim();
+      if (!company || !products) {
+        alert('Please fill in at least company name and what they sell.');
+        return;
+      }
+
+      const entry = {
+        id: Date.now(),
+        type: 'supplier',
+        company,
+        contact: document.getElementById('supContact').value.trim(),
+        email: document.getElementById('supEmail').value.trim(),
+        phone: document.getElementById('supPhone').value.trim(),
+        country: document.getElementById('supCountry').value.trim(),
+        productType: document.getElementById('supProductType').value.trim(),
+        productsOrNeeds: products,
+        attachmentLink: document.getElementById('supAttachment').value.trim(),
+        exFactory: document.getElementById('supExFactory').value.trim(),
+        fob: document.getElementById('supFOB').value.trim(),
+        qrData: document.getElementById('supQR').value.trim(),
+        notes: document.getElementById('supNotes').value.trim(),
+        privateLabel: '',
+        markets: '',
+        timestamp: Date.now()
+      };
+
+      const ok = await submitToSheet(entry);
+      if (ok) {
+        entries.push(entry);
+        updateSummary();
+        renderTable();
+        clearSupplierForm();
+      }
+    }
+
+    // ----- Buyer helpers -----
+    function clearBuyerForm() {
+      [
+        'buyContact','buyCompany','buyEmail','buyPhone','buyCountry',
+        'buyNeeds','buyAttachment','buyPL','buyMarkets','buyQR','buyNotes'
+      ].forEach((id) => {
+        const el = document.getElementById(id);
+        if (el) el.value = '';
+      });
+    }
+
+    async function saveBuyer() {
+      const contact = document.getElementById('buyContact').value.trim();
+      const needs   = document.getElementById('buyNeeds').value.trim();
+      if (!contact || !needs) {
+        alert('Please fill in at least contact name and what they want to buy.');
+        return;
+      }
+
+      const entry = {
+        id: Date.now(),
+        type: 'buyer',
+        company: document.getElementById('buyCompany').value.trim(),
+        contact,
+        email: document.getElementById('buyEmail').value.trim(),
+        phone: document.getElementById('buyPhone').value.trim(),
+        country: document.getElementById('buyCountry').value.trim(),
+        productType: '',
+        productsOrNeeds: needs,
+        attachmentLink: document.getElementById('buyAttachment').value.trim(),
+        exFactory: '',
+        fob: '',
+        privateLabel: document.getElementById('buyPL').value.trim(),
+        markets: document.getElementById('buyMarkets').value.trim(),
+        qrData: document.getElementById('buyQR').value.trim(),
+        notes: document.getElementById('buyNotes').value.trim(),
+        timestamp: Date.now()
+      };
+
+      const ok = await submitToSheet(entry);
+      if (ok) {
+        entries.push(entry);
+        updateSummary();
+        renderTable();
+        clearBuyerForm();
+      }
+    }
+
+    // ----- Mode toggle & scan button state -----
+    function setMode(mode) {
+      currentMode = mode;
+
+      const supCard = document.getElementById('supplierFormCard');
+      const buyCard = document.getElementById('buyerFormCard');
+      const btnSup = document.getElementById('btnSupplier');
+      const btnBuy = document.getElementById('btnBuyer');
+      const btnScan = document.getElementById('btnScanQr');
+
+      if (mode === 'supplier') {
+        supCard.classList.remove('d-none');
+        buyCard.classList.add('d-none');
+        btnSup.classList.add('btn-primary');
+        btnSup.classList.remove('btn-outline-primary');
+        btnBuy.classList.remove('btn-primary');
+        btnBuy.classList.add('btn-outline-primary');
+      } else if (mode === 'buyer') {
+        supCard.classList.add('d-none');
+        buyCard.classList.remove('d-none');
+        btnBuy.classList.add('btn-primary');
+        btnBuy.classList.remove('btn-outline-primary');
+        btnSup.classList.remove('btn-primary');
+        btnSup.classList.add('btn-outline-primary');
+      }
+
+      // Enable scan button only after a mode is selected
+      btnScan.classList.remove('btn-disabled');
+    }
+
+    // ----- QR parsing -----
+    function parseContactFromText(text) {
+      const data = { fullName:'', company:'', email:'', phone1:'', phone2:'', website:'' };
+      const trimmed = text.trim();
+
+      if (trimmed.includes('BEGIN:VCARD')) {
+        const lines = trimmed.split(/\\r?\\n/);
+        const phones = [];
+        lines.forEach((l) => {
+          if (l.startsWith('FN:')) data.fullName = l.substring(3).trim();
+          else if (l.startsWith('N:')) {
+            const parts = l.substring(2).split(';');
+            if (!data.fullName) data.fullName = (parts[1]||'') + ' ' + (parts[0]||'');
+          } else if (l.startsWith('ORG:')) data.company = l.substring(4).trim();
+          else if (l.startsWith('EMAIL')) {
+            const parts = l.split(':'); data.email = (parts[1]||'').trim();
+          } else if (l.startsWith('TEL')) {
+            const parts = l.split(':'); const p = (parts[1]||'').trim(); if (p) phones.push(p);
+          } else if (l.startsWith('URL')) {
+            const parts = l.split(':'); data.website = (parts[1]||'').trim();
+          }
+        });
+        data.phone1 = phones[0] || '';
+        data.phone2 = phones[1] || '';
+      } else if (trimmed.startsWith('MECARD:')) {
+        const parts = trimmed.replace(/^MECARD:/,'').split(';');
+        const phones = [];
+        parts.forEach((p)=>{
+          if (p.startsWith('N:')) data.fullName = p.substring(2);
+          else if (p.startsWith('ORG:')) data.company = p.substring(4);
+          else if (p.startsWith('EMAIL:')) data.email = p.substring(6);
+          else if (p.startsWith('TEL:')) phones.push(p.substring(4));
+          else if (p.startsWith('URL:')) data.website = p.substring(4);
+        });
+        data.phone1 = phones[0] || '';
+        data.phone2 = phones[1] || '';
+      } else if (/https?:\\/\\//i.test(trimmed)) {
+        data.website = trimmed;
+      }
+
+      return data;
+    }
+
+    function applyScanToCurrentForm(rawText) {
+      const parsed = parseContactFromText(rawText);
+
+      if (currentMode === 'supplier') {
+        const supCompany = document.getElementById('supCompany');
+        const supContact = document.getElementById('supContact');
+        const supEmail   = document.getElementById('supEmail');
+        const supPhone   = document.getElementById('supPhone');
+        const supQR      = document.getElementById('supQR');
+        const supNotes   = document.getElementById('supNotes');
+
+        if (parsed.company && !supCompany.value) supCompany.value = parsed.company;
+        if (parsed.fullName && !supContact.value) supContact.value = parsed.fullName;
+        if (parsed.email && !supEmail.value) supEmail.value = parsed.email;
+        if (parsed.phone1 && !supPhone.value) supPhone.value = parsed.phone1;
+        supQR.value = rawText;
+        if (parsed.website && !supNotes.value) supNotes.value = 'Website: ' + parsed.website;
+
+      } else if (currentMode === 'buyer') {
+        const buyContact = document.getElementById('buyContact');
+        const buyCompany = document.getElementById('buyCompany');
+        const buyEmail   = document.getElementById('buyEmail');
+        const buyPhone   = document.getElementById('buyPhone');
+        const buyQR      = document.getElementById('buyQR');
+        const buyNotes   = document.getElementById('buyNotes');
+
+        if (parsed.fullName && !buyContact.value) buyContact.value = parsed.fullName;
+        if (parsed.company && !buyCompany.value) buyCompany.value = parsed.company;
+        if (parsed.email && !buyEmail.value) buyEmail.value = parsed.email;
+        if (parsed.phone1 && !buyPhone.value) buyPhone.value = parsed.phone1;
+        buyQR.value = rawText;
+        if (parsed.website && !buyNotes.value) buyNotes.value = 'Website: ' + parsed.website;
+      }
+    }
+
+    // ----- QR scanner open/close -----
+    function openQrScanner() {
+      if (!currentMode) {
+        alert('Please select whether this lead is a Supplier or Buyer first.');
+        return;
+      }
+
+      const overlay = document.getElementById('qrScannerOverlay');
+      overlay.style.display = 'flex';
+
+      try {
+        if (!html5QrCode) html5QrCode = new Html5Qrcode('qr-reader');
+        html5QrCode
+          .start(
+            { facingMode: 'environment' },
+            { fps: 10, qrbox: 250 },
+            (decodedText) => {
+              applyScanToCurrentForm(decodedText);
+              closeQrScanner();
+            },
+            () => {}
+          )
+          .then(() => { scannerActive = true; })
+          .catch((err) => {
+            console.error('Camera start error:', err);
+            alert('Could not start camera. Please check browser permissions or open this page directly in Safari/Chrome.');
+            closeQrScanner();
+          });
+      } catch (err) {
+        console.error('Scanner init error:', err);
+        alert('Could not start camera. Please check browser permissions or open this page directly in Safari/Chrome.');
+        closeQrScanner();
+      }
+    }
+
+    function closeQrScanner() {
+      const overlay = document.getElementById('qrScannerOverlay');
+      overlay.style.display = 'none';
+      if (html5QrCode && scannerActive) {
+        html5QrCode.stop()
+          .then(() => { scannerActive = false; })
+          .catch((e) => {
+            console.warn('Error stopping scanner:', e);
+            scannerActive = false;
+          });
+      }
+    }
+
+    // ----- Init -----
+    window.addEventListener('DOMContentLoaded', () => {
+      // Mode buttons
+      document.getElementById('btnSupplier').addEventListener('click', () => setMode('supplier'));
+      document.getElementById('btnBuyer').addEventListener('click', () => setMode('buyer'));
+
+      // Scan button
+      document.getElementById('btnScanQr').addEventListener('click', openQrScanner);
+
+      // Save / clear buttons
+      document.getElementById('btnSaveSupplier').addEventListener('click', saveSupplier);
+      document.getElementById('btnClearSupplier').addEventListener('click', clearSupplierForm);
+
+      document.getElementById('btnSaveBuyer').addEventListener('click', saveBuyer);
+      document.getElementById('btnClearBuyer').addEventListener('click', clearBuyerForm);
+
+      // Table filter
+      document.getElementById('filterType').addEventListener('change', renderTable);
+
+      // Start with no mode selected, scan disabled
+      updateSummary();
+      renderTable();
+
+      // Render BOI contact QR
+      new QRCode(document.getElementById('boiContactQr'), {
+        text: BOI_VCARD,
+        width: 140,
+        height: 140,
+        correctLevel: QRCode.CorrectLevel.M
+      });
+    });
+  </script>
+</body>
+</html>
